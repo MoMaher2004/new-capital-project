@@ -1,0 +1,79 @@
+users:
+    id
+    name
+    email
+    password
+    createdAt
+    isAdmin
+    isDeleted
+    passwordResetToken
+    passwordResetTokenExpiresAt
+    passwordLastUpdatedAt
+    isEmailConfirmed
+    emailConfirmationToken
+
+projects:
+    id
+    title
+    ARtitle
+    description
+    ARdescription
+    link
+    category
+    subCategory
+    showOnHome1
+    showOnHome2
+
+categories:
+    id
+    name
+    ARname
+
+subCategories:
+    id
+    name
+    ARname
+
+projectmedia:
+    id
+    projectId
+    fileName
+
+reviews:
+    id
+    fileName
+    name
+    ARname
+    role
+    ARrole
+    content
+    ARcontent
+
+slides:
+    id
+    backText
+    ARbackText
+    fileName
+    title
+    ARtitle
+    description
+    ARdescription
+
+settings:
+    id
+    name
+    page
+    type
+    content
+
+teamMembers:
+    id
+    fileName
+    name
+    ARname
+    role
+    ARrole
+    facebookUrl
+    instagramUrl
+    xUrl
+    customLink

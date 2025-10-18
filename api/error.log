@@ -1,0 +1,65 @@
+[2025-10-17T18:36:50.357Z] Error during adding user: {"message":"Access denied for user 'root'@'localhost'","code":"ER_ACCESS_DENIED_NO_PASSWORD_ERROR","errno":1698,"sqlState":"28000","sqlMessage":"Access denied for user 'root'@'localhost'"}
+[2025-10-17T18:36:50.368Z] add user error: {}
+[2025-10-17T18:37:33.812Z] add user error: {}
+[2025-10-17T19:14:04.609Z] {}
+[2025-10-17T19:40:21.094Z] MulterError: Unexpected field
+    at wrappedFileFilter (/home/maher/Desktop/new_capital/api/node_modules/multer/index.js:40:19)
+    at Multipart.<anonymous> (/home/maher/Desktop/new_capital/api/node_modules/multer/lib/make-middleware.js:132:7)
+    at Multipart.emit (node:events:518:28)
+    at HeaderParser.cb (/home/maher/Desktop/new_capital/api/node_modules/busboy/lib/types/multipart.js:358:14)
+    at HeaderParser.push (/home/maher/Desktop/new_capital/api/node_modules/busboy/lib/types/multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (/home/maher/Desktop/new_capital/api/node_modules/busboy/lib/types/multipart.js:394:37)
+    at feed (/home/maher/Desktop/new_capital/api/node_modules/streamsearch/lib/sbmh.js:248:10)
+    at SBMH.push (/home/maher/Desktop/new_capital/api/node_modules/streamsearch/lib/sbmh.js:104:16)
+    at Multipart._write (/home/maher/Desktop/new_capital/api/node_modules/busboy/lib/types/multipart.js:567:19)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+[2025-10-17T19:45:27.759Z] {}
+[2025-10-17T19:52:15.322Z] {}
+[2025-10-17T20:08:21.249Z] Error during viewReviews: {"message":"FUNCTION newCapital.CONCATE does not exist","code":"ER_SP_DOES_NOT_EXIST","errno":1305,"sql":"SELECT id, CONCATE('http://0.0.0.0/images/reviews/', fileName) AS fileName, name, ARname, role, ARrole, content, ARcontent FROM reviews ORDER BY id DESC LIMIT 1 OFFSET 0","sqlState":"42000","sqlMessage":"FUNCTION newCapital.CONCATE does not exist"}
+[2025-10-17T20:08:21.254Z] {}
+[2025-10-17T20:32:30.450Z] Error during deleteReview: {}
+[2025-10-17T20:32:30.453Z] {}
+[2025-10-17T20:33:10.178Z] Error during deleteReview: {}
+[2025-10-17T20:33:10.179Z] {}
+[2025-10-17T20:33:52.821Z] Error during deleteReview: {}
+[2025-10-17T20:33:52.822Z] {}
+[2025-10-17T21:03:17.660Z] Error during viewMembers: {"message":"Unknown column 'backText' in 'field list'","code":"ER_BAD_FIELD_ERROR","errno":1054,"sql":"SELECT id, CONCAT('http://0.0.0.0/images/members/', fileName) AS fileName, backText, ARbackText, title, ARtitle, description, ARdescription FROM members ORDER BY id DESC LIMIT 1 OFFSET 0","sqlState":"42S22","sqlMessage":"Unknown column 'backText' in 'field list'"}
+[2025-10-17T21:03:17.664Z] {}
+[2025-10-17T21:07:33.324Z] Error during addMember: {"message":"Column count doesn't match value count at row 1","code":"ER_WRONG_VALUE_COUNT_ON_ROW","errno":1136,"sql":"INSERT INTO members (fileName, name, role, ARname, ARrole, facebookUrl, instagramUrl, xUrl, customLink) VALUES ('1760735253266-610457468.png', 'Hi', 'Gimmy', 'What next ?', 'يسطا', 'https://not-porn.com', '', '')","sqlState":"21S01","sqlMessage":"Column count doesn't match value count at row 1"}
+[2025-10-17T21:07:33.327Z] {}
+[2025-10-17T21:47:57.679Z] {}
+[2025-10-17T21:49:23.032Z] {}
+[2025-10-17T21:51:05.491Z] {}
+[2025-10-17T21:52:16.184Z] {}
+[2025-10-17T22:00:08.358Z] {"code":"ERR_INVALID_ARG_TYPE"}
+[2025-10-18T15:44:12.627Z] Error during viewCategories: {"message":"Table 'newCapital.categories' doesn't exist","code":"ER_NO_SUCH_TABLE","errno":1146,"sql":"SELECT * FROM categories ORDER BY name LIMIT 1 OFFSET 0","sqlState":"42S02","sqlMessage":"Table 'newCapital.categories' doesn't exist"}
+[2025-10-18T15:44:12.642Z] {}
+[2025-10-18T16:17:14.329Z] Error during deleteMessage: {}
+[2025-10-18T16:17:14.331Z] {}
+[2025-10-18T16:25:49.440Z] Error during addSubCategory: {"message":"Table 'newCapital.subSubCategories' doesn't exist","code":"ER_NO_SUCH_TABLE","errno":1146,"sql":"INSERT INTO subSubCategories (name, ARname) VALUES ('taweel el3omr', 'لسبيبث')","sqlState":"42S02","sqlMessage":"Table 'newCapital.subSubCategories' doesn't exist"}
+[2025-10-18T16:25:49.444Z] {}
+[2025-10-18T16:26:20.180Z] Error during addSubCategory: {"message":"Table 'newCapital.subSubCategories' doesn't exist","code":"ER_NO_SUCH_TABLE","errno":1146,"sql":"INSERT INTO subSubCategories (name, ARname) VALUES ('taweel el3omr', 'لسبيبث')","sqlState":"42S02","sqlMessage":"Table 'newCapital.subSubCategories' doesn't exist"}
+[2025-10-18T16:26:20.182Z] {}
+[2025-10-18T18:55:02.183Z] Error during viewProject: {"message":"Table 'newCapital.project' doesn't exist","code":"ER_NO_SUCH_TABLE","errno":1146,"sql":"SELECT * FROM project  ORDER BY id DESC LIMIT 1 OFFSET 0","sqlState":"42S02","sqlMessage":"Table 'newCapital.project' doesn't exist"}
+[2025-10-18T18:55:02.188Z] {}
+[2025-10-18T19:03:15.639Z] Error during viewProject: {"message":"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1 = 1 ORDER BY id DESC LIMIT 1 OFFSET 0' at line 1","code":"ER_PARSE_ERROR","errno":1064,"sql":"SELECT * FROM projects   1 = 1 ORDER BY id DESC LIMIT 1 OFFSET 0","sqlState":"42000","sqlMessage":"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1 = 1 ORDER BY id DESC LIMIT 1 OFFSET 0' at line 1"}
+[2025-10-18T19:03:15.642Z] {}
+[2025-10-18T19:07:02.125Z] Error during addProject: {"message":"Cannot add or update a child row: a foreign key constraint fails (`newCapital`.`projects`, CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`) ON DELETE RESTRICT)","code":"ER_NO_REFERENCED_ROW_2","errno":1452,"sql":"INSERT INTO projects (title, ARtitle, description, ARdescription, link, categoryId, subCategoryId, showOnHome1, showOnHome2) VALUES ('taweel el3omr', 'gsagagsa', 'taweel el3omr', 'lhi\\';uiyg', '', 1, 1, 1, 0)","sqlState":"23000","sqlMessage":"Cannot add or update a child row: a foreign key constraint fails (`newCapital`.`projects`, CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`) ON DELETE RESTRICT)"}
+[2025-10-18T19:07:02.131Z] {}
+[2025-10-18T19:11:24.828Z] Error during editProject: {}
+[2025-10-18T19:11:24.832Z] {}
+[2025-10-18T19:12:03.761Z] Error during editProject: {}
+[2025-10-18T19:12:03.765Z] {}
+[2025-10-18T19:13:13.883Z] Error during deleteProject: {}
+[2025-10-18T19:13:13.884Z] {}
+[2025-10-18T19:51:43.800Z] Error during uploadMedia: {"message":"Unknown column 'productId' in 'field list'","code":"ER_BAD_FIELD_ERROR","errno":1054,"sql":"INSERT INTO projectMedia (productId, fileName) VALUES (4, '1760817103766-908268238.png')","sqlState":"42S22","sqlMessage":"Unknown column 'productId' in 'field list'"}
+[2025-10-18T19:51:43.804Z] {}
+[2025-10-18T19:54:01.557Z] {}
+[2025-10-18T19:55:07.220Z] Error during deleteMedia: {}
+[2025-10-18T19:55:07.223Z] {}
+[2025-10-18T19:55:36.735Z] {}
+[2025-10-18T19:56:21.142Z] Error during deleteMedia: {}
+[2025-10-18T19:56:21.145Z] {}
+[2025-10-18T19:56:45.048Z] {}
+[2025-10-18T19:57:08.785Z] {"code":"ERR_INVALID_ARG_TYPE"}
+[2025-10-18T20:21:39.621Z] {}
