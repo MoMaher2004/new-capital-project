@@ -163,27 +163,6 @@ const deactivateUser = async id => {
   }
 }
 
-const updateEmailConfirmationToken = async email => {
-  try {
-    const emailConfirmationToken = generateToken()
-    const hashedEmailConfirmationToken = await hashToken(emailConfirmationToken)
-    const [res] = await conn.query(
-      'UPDATE users SET emailConfirmationToken = ? WHERE email = ? AND isDeleted = 0 AND isEmailConfirmed = 0',
-      [hashedEmailConfirmationToken, email]
-    )
-    if (res.affectedRows === 0) {
-      throw new Error('Failed to update email confirmation token')
-    }
-    return {
-      success: 'Email confirmation token updated successfully',
-      emailConfirmationToken: emailConfirmationToken
-    }
-  } catch (error) {
-    console.error('Error during updating email confirmation token:', error)
-    throw new Error('Something went wrong')
-  }
-}
-
 const updateResetPasswordToken = async email => {
   try {
     const resetPasswordToken = generateToken()
@@ -250,40 +229,6 @@ const getUsersList = async (page = 1, limit = 20, isDeleted = 0) => {
   }
 }
 
-const confirmUserEmail = async (id, token) => {
-  try {
-    const [rows] = await conn.query(
-      'SELECT * FROM users WHERE id = ? AND isDeleted = 0',
-      [id]
-    )
-
-    if (rows.length === 0) {
-      return { error: 'User not found' }
-    }
-
-    if (rows[0].isEmailConfirmed === 1) {
-      return { success: 'Email is already confirmed' }
-    }
-
-    if (!(await compareToken(token, rows[0].emailConfirmationToken))) {
-      return { error: 'token is not valid' }
-    }
-
-    const [res] = await conn.query(
-      'UPDATE users SET isEmailConfirmed = 1, emailConfirmationToken = "" WHERE id = ? AND isDeleted = 0',
-      [id]
-    )
-    if (res.affectedRows === 0) {
-      return { error: 'Failed to confirm email' }
-    }
-
-    return { success: 'Email is confirmed successfully', id: rows[0].id, email: rows[0].email }
-  } catch (error) {
-    console.error('Error during confirming Email:', error)
-    throw new Error('Something went wrong')
-  }
-}
-
 const accountInfo = async id => {
   try {
     const [rows] = await conn.query(
@@ -312,10 +257,8 @@ module.exports = {
   checkUserAuth,
   getUserById,
   deactivateUser,
-  updateEmailConfirmationToken,
   addUser,
   getUsersList,
-  confirmUserEmail,
   accountInfo,
   getUserByEmail,
   updateResetPasswordToken,

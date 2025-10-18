@@ -29,10 +29,8 @@ router.patch(
   (req, res, next) => adminOnly(req, res, next),
   deactivateUser,
 )
-// router.patch('/resendEmailConfirmationToken', resendEmailConfirmationToken)
 router.post('/add', verifyToken, (req, res, next) => adminOnly(req, res, next), addUser)
 router.get('/list', verifyToken, (req, res, next) => adminOnly(req, res, next), getUsersList)
-// router.get('/confirm-email', confirmUserEmail)
 
 router.get('/logout', verifyToken, logout)
 

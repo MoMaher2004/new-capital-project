@@ -226,19 +226,6 @@ const deactivateUser = async (req, res) => {
   }
 }
 
-const updateEmailConfirmationToken = async (email) => {
-  try {
-    const result = await userModel.updateEmailConfirmationToken(email)
-    if (!result.success) {
-      throw new Error('unknown error')
-    }
-    return result
-  } catch (error) {
-    console.error('updating email token error:', error)
-    throw new Error('unknown error')
-  }
-}
-
 const updateResetPasswordToken = async (email) => {
   try {
     const checkingEmailConfirmation = await userModel.getUserByEmail(email)
@@ -253,73 +240,6 @@ const updateResetPasswordToken = async (email) => {
   } catch (error) {
     console.error('updateResetPasswordToken:', error)
     throw new Error('unknown error')
-  }
-}
-
-const resendEmailConfirmationToken = async (req, res) => {
-  try {
-    const { email } = req.body
-    const toGetUserId = await userModel.getUserByEmail(email)
-    const result = await updateEmailConfirmationToken(email)
-    const from = 'support'
-    const subject = 'Confirm Email'
-    const message = `<!DOCTYPE html>
-<html>
-  <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f9f9f9;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f9f9; padding:20px 0;">
-      <tr>
-        <td align="center">
-          <table width="400" cellpadding="20" cellspacing="0" border="0" style="background-color:#ffffff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-            <tr>
-              <td align="center" style="padding-bottom:10px;">
-                <img src="${process.env.URL}/assets/logo-9ebce8a9.png" alt="Dawoud Motors Logo" width="150" height="50" style="display:block; border-radius:8px;" />
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="font-size:18px; font-weight:bold; color:#333333; padding-bottom:10px;">
-                Welcome to Dawoud Motors
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="font-size:14px; color:#555555; line-height:1.6;">
-                Please confirm your email by clicking the button below.
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:20px 0;">
-                <a href="${process.env.URL}/confirm?token=${encodeURIComponent(result.emailConfirmationToken)}&id=${encodeURIComponent(toGetUserId.id)}" 
-                   style="background-color:#1e88e5; color:#ffffff; text-decoration:none; padding:12px 24px; border-radius:4px; font-size:14px; display:inline-block;">
-                   Confirm Email
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="font-size:12px; color:#999999; padding-top:10px;">
-                If the button doesn’t work, copy and paste this link into your browser:<br>
-                <a href="${process.env.URL}/confirm?token=${encodeURIComponent(result.emailConfirmationToken)}&id=${encodeURIComponent(toGetUserId.id)}" style="color:#1e88e5; word-break:break-all;">
-                  ${process.env.URL}/confirm?token=${encodeURIComponent(result.emailConfirmationToken)}&id=${encodeURIComponent(toGetUserId.id)}
-                </a>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>`
-    let sendEmailRes
-    try {
-      sendEmailRes = await sendEmail(email, from, subject, message)
-    } catch (error) {
-      console.error('send email error:', error)
-    }
-    if (sendEmailRes.error) {
-      return res.status(400).json({ error: sendEmailRes.error })
-    }
-    return res.status(200).json({ success: 'email was sent successfully' })
-  } catch (error) {
-    console.error('resendEmailConfirmationToken:', error)
-    return res.status(500).json({ error: 'Internal server error, Please try again' })
   }
 }
 
@@ -439,64 +359,6 @@ const addUser = async (req, res) => {
     if (addUserRes.error) {
       return res.status(400).json({ error: addUserRes.error })
     }
-
-    const result = await updateEmailConfirmationToken(value.email)
-    const from = 'support'
-    const subject = 'Confirm Email'
-    const message = `<!DOCTYPE html>
-<html>
-  <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f9f9f9;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f9f9; padding:20px 0;">
-      <tr>
-        <td align="center">
-          <table width="400" cellpadding="20" cellspacing="0" border="0" style="background-color:#ffffff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-            <tr>
-              <td align="center" style="padding-bottom:10px;">
-                <img src="${process.env.URL}/assets/logo-9ebce8a9.png" alt="Dawoud Motors Logo" width="150" height="50" style="display:block; border-radius:8px;" />
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="font-size:18px; font-weight:bold; color:#333333; padding-bottom:10px;">
-                Welcome to Dawoud Motors
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="font-size:14px; color:#555555; line-height:1.6;">
-                Please confirm your email by clicking the button below.
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding:20px 0;">
-                <a href="${process.env.URL}/confirm?token=${encodeURIComponent(result.emailConfirmationToken)}&id=${encodeURIComponent(addUserRes.id)}" 
-                   style="background-color:#1e88e5; color:#ffffff; text-decoration:none; padding:12px 24px; border-radius:4px; font-size:14px; display:inline-block;">
-                   Confirm Email
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="font-size:12px; color:#999999; padding-top:10px;">
-                If the button doesn’t work, copy and paste this link into your browser:<br>
-                <a href="${process.env.URL}/confirm?token=${encodeURIComponent(result.emailConfirmationToken)}&id=${encodeURIComponent(addUserRes.id)}" style="color:#1e88e5; word-break:break-all;">
-                  ${process.env.URL}/confirm?token=${encodeURIComponent(result.emailConfirmationToken)}&id=${encodeURIComponent(addUserRes.id)}
-                </a>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>`
-    let sendEmailRes
-    try {
-      // sendEmailRes = await sendEmail(value.email, from, subject, message)
-      console.log(result.emailConfirmationToken)
-    } catch (error) {
-      console.error('send email error:', error)
-    }
-    // if (sendEmailRes.error) {
-    //   return res.status(400).json({ error: sendEmailRes.error })
-    // }
     return res.status(201).json({
       success: 'User was added successfully, Check your inbox to confirm your email',
     })
@@ -599,7 +461,6 @@ module.exports = {
   deactivateUser,
   addUser,
   getUsersList,
-  resendEmailConfirmationToken,
   confirmUserEmail,
   logout,
   accountInfo,
