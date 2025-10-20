@@ -195,7 +195,7 @@ const addUser = async (name, email, password) => {
       return { error: 'Email already exists' }
     }
     const [res] = await conn.query(
-      'INSERT INTO users (name, email, password, admin, isEmailConfirmed) VALUES (?, ?, ?, 1, 1)',
+      'INSERT INTO users (name, email, password, isAdmin, isEmailConfirmed) VALUES (?, ?, ?, 1, 1)',
       [name, email, hashedPassword]
     )
     if (res.affectedRows === 0) {
