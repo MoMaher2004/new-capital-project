@@ -1,4 +1,5 @@
 const conn = require('../config/db')
+const { standardizeArabic } = require('../utils/standardizeArabic')
 
 const viewProjectById = async (id) => {
   try {
@@ -45,12 +46,19 @@ const viewProjects = async (
   homePage2 = false,
   categoryId = 0,
   subCategoryId = 0,
+  searchText
 ) => {
   try {
     const offset = (page - 1) * limit
     let params = []
     if (categoryId > 0) params.push(categoryId)
     if (subCategoryId > 0) params.push(subCategoryId)
+    searchText = standardizeArabic(searchText).split(' ')
+    filter = ''
+    if (searchText[0] !== '') {
+      filter += searchText.map(() => ` AND searchText REGEXP ?`).join('')
+      params.push(...searchText)
+    }
     const [rows] = await conn.query(
       `
       SELECT 
@@ -68,7 +76,7 @@ const viewProjects = async (
               WHEN m.id IS NOT NULL THEN
                 JSON_OBJECT(
                   'id', m.id,
-                  'fileName', CONCAT('http://0.0.0.0/images/projects/', m.fileName)
+                  'fileName', CONCAT('${process.env.URL}/projects/', m.fileName)
                 )
             END
           ), 
@@ -78,11 +86,12 @@ const viewProjects = async (
       LEFT JOIN projectMedia m ON p.id = m.projectId
       LEFT JOIN subCategories s ON p.subCategoryId = s.id
       LEFT JOIN categories c ON s.categoryId = c.id
-      WHERE 
-        ${homePage1 ? 'p.homePage1 = 1 AND' : ''} 
-        ${categoryId > 0 ? 's.categoryId = ? AND' : ''} 
-        ${subCategoryId > 0 ? 'p.subCategoryId = ? AND' : ''} 
-        ${homePage2 ? 'p.homePage2 = 1' : '1 = 1'}
+      WHERE 1 = 1
+        ${homePage1 ? 'AND p.homePage1 = 1' : ''} 
+        ${homePage2 ? 'AND p.homePage2 = 1' : ''}
+        ${categoryId > 0 ? 'AND s.categoryId = ?' : ''} 
+        ${subCategoryId > 0 ? 'AND p.subCategoryId = ?' : ''} 
+        ${(searchText[0] !== '') ? ` ${filter}` : ''}
       GROUP BY p.id
       ORDER BY p.id ${orderDesc ? 'DESC' : 'ASC'}
       LIMIT ? OFFSET ?`,
@@ -106,8 +115,15 @@ const addProject = async (
   showOnHome2,
 ) => {
   try {
+    const [cat] = await conn.query(`SELECT s.name AS sName, s.ARname AS sARname, c.name AS cName, c.ARname AS cARname FROM subCategories s LEFT JOIN categories c ON c.id = s.id WHERE s.id = ?`, [subCategoryId])
+    const searchText = standardizeArabic(
+      ARtitle,
+      ARdescription,
+      cat[0].sARname,
+      cat[0].cARname
+    ) + title + description + cat[0].sName + cat[0].cName
     const [rows] = await conn.query(
-      `INSERT INTO projects (title, ARtitle, description, ARdescription, link, subCategoryId, showOnHome1, showOnHome2) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO projects (title, ARtitle, description, ARdescription, link, subCategoryId, showOnHome1, showOnHome2, searchText) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         title,
         ARtitle,
@@ -117,6 +133,7 @@ const addProject = async (
         subCategoryId,
         showOnHome1 + 0,
         showOnHome2 + 0,
+        searchText
       ],
     )
     if (rows.affectedRows === 0) {

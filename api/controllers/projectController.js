@@ -32,6 +32,7 @@ const viewProjects = async (req, res) => {
       showOnHome2: joi.boolean().optional().default(false),
       categoryId: joi.number().integer().min(1).optional(),
       subCategoryId: joi.number().integer().min(1).optional(),
+      searchText: joi.string().trim().max(200).allow('').optional(),
     })
     const { error, value } = schema.validate(req.query, {
       abortEarly: true,
@@ -47,6 +48,7 @@ const viewProjects = async (req, res) => {
       value.homePage2,
       value.categoryId,
       value.subCategoryId,
+      value.searchText,
     )
     return res.status(200).json({ data })
   } catch (error) {
@@ -81,7 +83,7 @@ const addProject = async (req, res) => {
       value.link,
       value.subCategoryId,
       value.showOnHome1,
-      value.showOnHome2,
+      value.showOnHome2
     )
 
     return res.status(200).json({ success: 'Project is added successfully' })

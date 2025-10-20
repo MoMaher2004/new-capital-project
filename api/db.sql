@@ -76,6 +76,7 @@ CREATE TABLE
         subCategoryId INT NOT NULL,
         showOnHome1 BOOLEAN NOT NULL DEFAULT 0,
         showOnHome2 BOOLEAN NOT NULL DEFAULT 0,
+        searchText TEXT NOT NULL,
         FOREIGN KEY (subCategoryId) REFERENCES subCategories (id) ON DELETE RESTRICT
     );
 
