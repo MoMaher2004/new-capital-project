@@ -22,7 +22,7 @@ const viewProjectById = async (id) => {
                 )
             END
           )
-        , JSON_ARRAT()) AS media
+        , JSON_ARRAY()) AS media
       FROM projects p
       LEFT JOIN projectMedia m ON p.id = m.projectId
       LEFT JOIN subCategories s ON p.subCategoryId = s.id
@@ -167,7 +167,34 @@ const editProject = async (
 
 const deleteProject = async (id) => {
   try {
-    const [rows] = await conn.query(`SELECT * FROM projects WHERE id = ?`, [id])
+    const [rows] = await conn.query(`
+      SELECT 
+        p.*,
+        s.categoryId AS categoryId,
+        s.name AS subCategoryName,
+        s.ARname AS subCategoryARName,
+        CONCAT('${process.env.URL}/images/subCategories/', s.fileName) AS subCategoryfileName,
+        c.name AS categoryName,
+        c.ARname AS categoryARName,
+        CONCAT('${process.env.URL}/images/categories/', c.fileName) AS categoryfileName,
+        COALESCE(
+          JSON_ARRAYAGG(
+            CASE
+              WHEN m.id IS NOT NULL THEN
+                JSON_OBJECT(
+                  'id', m.id,
+                  'fileName', m.fileName
+                )
+            END
+          )
+        , JSON_ARRAY()) AS media
+      FROM projects p
+      LEFT JOIN projectMedia m ON p.id = m.projectId
+      LEFT JOIN subCategories s ON p.subCategoryId = s.id
+      LEFT JOIN categories c ON s.categoryId = c.id
+      WHERE p.id = ?
+      GROUP BY p.id
+    `, [id])
     const [res] = await conn.query(`DELETE FROM projects WHERE id = ?`, [id])
     if (res.affectedRows === 0) {
       throw new Error('Something went wrong')

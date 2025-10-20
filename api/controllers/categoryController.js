@@ -83,6 +83,10 @@ const deleteCategory = async (req, res) => {
     if (result.error) {
       return res.status(400).json({ error: result.error })
     }
+    try{
+      const filePath = path.join(__dirname, '../../images/categories', result.fileName)
+      await fs.unlink(filePath)
+    } catch (error){}
     return res.status(200).json({ success: 'category is deleted successfully', data: result })
   } catch (error) {
     console.error(error)

@@ -139,6 +139,12 @@ const deleteProject = async (req, res) => {
     if (result.error) {
       return res.status(400).json({ error: result.error })
     }
+    try{
+      for (const m of result.media){
+        const filePath = path.join(__dirname, '../../images/projects', m.fileName)
+        await fs.unlink(filePath)
+      }
+    }catch(error){}
     return res.status(200).json({ success: 'project is deleted successfully', data: result })
   } catch (error) {
     console.error(error)

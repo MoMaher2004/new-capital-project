@@ -75,8 +75,10 @@ const deleteMember = async (req, res) => {
     if (result.error) {
       return res.status(400).json({ error: result.error })
     }
-    const filePath = path.join(__dirname, '../../images/members', result.fileName)
-    await fs.unlink(filePath)
+    try{
+      const filePath = path.join(__dirname, '../../images/members', result.fileName)
+      await fs.unlink(filePath)
+    } catch (error){}
     return res.status(200).json({ success: 'member is deleted successfully', data: result })
   } catch (error) {
     console.error(error)
