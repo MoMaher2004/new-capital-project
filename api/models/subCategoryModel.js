@@ -23,6 +23,49 @@ const viewSubCategories = async (page = 1, limit = 10, categoryId) => {
   }
 }
 
+const viewSubCategoriesFamily = async (rtl = false) => {
+  try {
+    const [rows] = await conn.query(
+      `SELECT 
+        c.id AS categoryId,
+        c.name AS categoryName,
+        c.ARname AS categoryARName,
+        CASE 
+          WHEN c.fileName IS NULL THEN NULL
+          ELSE CONCAT('http://0.0.0.0/images/categories/', c.fileName)
+        END AS categoryFileName,
+        COALESCE(
+          (
+            SELECT JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', s.id,
+                'name', s.name,
+                'ARname', s.ARname,
+                'fileName', 
+                  CASE 
+                    WHEN s.fileName IS NULL THEN NULL
+                    ELSE CONCAT('http://0.0.0.0/images/subCategories/', s.fileName)
+                  END
+              )
+            )
+            FROM subCategories s
+            WHERE s.categoryId = c.id
+            ORDER BY s.${rtl ? 'AR' : ''}name
+          ),
+          JSON_ARRAY()
+        ) AS subCategories
+      FROM categories c
+      ORDER BY c.${rtl ? 'AR' : ''}name
+      `,
+      [],
+    )
+    return rows
+  } catch (error) {
+    console.error('Error during viewSubCategoriesFamily:', error)
+    throw new Error('Something went wrong')
+  }
+}
+
 const addSubCategory = async (name, ARname, categoryId) => {
   try {
     const [rows] = await conn.query(
@@ -95,4 +138,5 @@ module.exports = {
   editSubCategory,
   deleteSubCategory,
   updateMedia,
+  viewSubCategoriesFamily,
 }

@@ -3,6 +3,17 @@ const joi = require('joi')
 const path = require('path')
 const fs = require('fs').promises
 
+const viewSubCategoriesFamily = async (req, res) => {
+  try {
+    const rtl = (req.query.rtl === true)
+    const data = await subCategoryModel.viewSubCategoriesFamily(rtl)
+    return res.status(200).json({ data })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ subCategory: 'Internal server error, Please try again' })
+  }
+}
+
 const viewSubCategories = async (req, res) => {
   try {
     const schema = joi.object({
@@ -128,4 +139,5 @@ module.exports = {
   addSubCategory,
   deleteSubCategory,
   updateMedia,
+  viewSubCategoriesFamily,
 }

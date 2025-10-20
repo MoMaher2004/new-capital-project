@@ -1,11 +1,12 @@
 const express = require('express')
 const { verifyToken, adminOnly } = require('../controllers/userController')
-const { viewSubCategories, addSubCategory, deleteSubCategory, editSubCategory, updateMedia } = require('../controllers/subCategoryController')
+const { viewSubCategories, addSubCategory, deleteSubCategory, editSubCategory, updateMedia, viewSubCategoriesFamily } = require('../controllers/subCategoryController')
 const imagesUtils = require('../utils/imagesUtils')
 
 const router = express.Router()
 
 router.get('/viewSubCategories', viewSubCategories)
+router.get('/viewSubCategoriesFamily', viewSubCategoriesFamily)
 router.post('/addSubCategory', verifyToken, adminOnly, addSubCategory)
 router.patch('/editSubCategory', verifyToken, adminOnly, editSubCategory)
 router.delete('/deleteSubCategory/:id', verifyToken, adminOnly, deleteSubCategory)
