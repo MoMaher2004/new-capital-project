@@ -63,3 +63,22 @@
 [2025-10-18T19:56:45.048Z] {}
 [2025-10-18T19:57:08.785Z] {"code":"ERR_INVALID_ARG_TYPE"}
 [2025-10-18T20:21:39.621Z] {}
+[2025-10-20T11:28:45.478Z] {}
+[2025-10-20T11:29:31.008Z] {}
+[2025-10-20T12:18:46.663Z] {}
+[2025-10-20T12:25:30.251Z] {}
+[2025-10-20T12:26:00.675Z] {}
+[2025-10-20T12:26:37.692Z] {}
+[2025-10-20T12:26:47.943Z] {"code":"ERR_INVALID_ARG_TYPE"}
+[2025-10-20T12:27:36.820Z] Error: ENOENT: no such file or directory, open '/home/maher/Desktop/new_capital/images/categories/1760963256813-798871521.png'
+[2025-10-20T12:55:21.604Z] Error during addSubCategory: {"message":"Unknown column 'categoryId' in 'field list'","code":"ER_BAD_FIELD_ERROR","errno":1054,"sql":"INSERT INTO subCategories (name, ARname, categoryId) VALUES ('taweel el3omr', 'لسبيبث', 1)","sqlState":"42S22","sqlMessage":"Unknown column 'categoryId' in 'field list'"}
+[2025-10-20T12:55:21.608Z] {}
+[2025-10-20T12:56:59.964Z] Error during viewProject: {"message":"Unknown column 's.categoryId' in 'field list'","code":"ER_BAD_FIELD_ERROR","errno":1054,"sql":"\n      SELECT \n        p.*,\n        s.categoryId as categoryId,\n        s.name as subCategoryName,\n        s.ARname as subCategoryARName,\n        CONCAT('http://0.0.0.0/images/subCategories/', s.fileName) as subCategoryfileName,\n        c.name as categoryName,\n        c.ARname as categoryARName,\n        CONCAT('http://0.0.0.0/images/categories/', c.fileName) as categoryfileName,\n        COALESCE(\n          JSON_ARRAYAGG(\n            JSON_OBJECT(\n              'id', m.id,\n              'fileName', CONCAT('http://0.0.0.0/images/projects/', m.fileName)\n            )\n          ), \n          JSON_ARRAY()\n        ) AS media\n      FROM projects p\n      LEFT JOIN projectMedia m ON p.id = m.projectId\n      WHERE \n         \n        s.categoryId = 2 AND \n        p.subCategoryId = 2 AND \n        1 = 1\n      GROUP BY p.id\n      ORDER BY p.id DESC\n      LIMIT 10 OFFSET 0","sqlState":"42S22","sqlMessage":"Unknown column 's.categoryId' in 'field list'"}
+[2025-10-20T12:56:59.966Z] {}
+[2025-10-20T13:09:21.344Z] Error during viewSubCategories: {"message":"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1","code":"ER_PARSE_ERROR","errno":1064,"sql":"SELECT * FROM subCategories WHERE categoryId = 10 ORDER BY name LIMIT 0 OFFSET ?","sqlState":"42000","sqlMessage":"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1"}
+[2025-10-20T13:09:21.348Z] {}
+[2025-10-20T13:10:01.226Z] Error during viewSubCategories: {"message":"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1","code":"ER_PARSE_ERROR","errno":1064,"sql":"SELECT * FROM subCategories WHERE categoryId = 10 ORDER BY name LIMIT 0 OFFSET ?","sqlState":"42000","sqlMessage":"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1"}
+[2025-10-20T13:10:01.228Z] {}
+[2025-10-20T13:10:38.505Z] Error during viewSubCategories: {"message":"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1","code":"ER_PARSE_ERROR","errno":1064,"sql":"SELECT * FROM subCategories WHERE categoryId = 10 ORDER BY name LIMIT 0 OFFSET ?","sqlState":"42000","sqlMessage":"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1"}
+[2025-10-20T13:10:38.508Z] {}
+[2025-10-20T13:19:16.903Z] {"code":"ERR_INVALID_ARG_TYPE"}

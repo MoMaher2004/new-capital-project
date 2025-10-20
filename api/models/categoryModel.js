@@ -4,7 +4,11 @@ const viewCategories = async (page = 1, limit = 10) => {
   try {
     const offset = (page - 1) * limit
     const [rows] = await conn.query(
-      `SELECT * FROM categories ORDER BY name LIMIT ? OFFSET ?`,
+      `SELECT id, name, ARname, 
+      CASE 
+      WHEN fileName = NULL THEN NULL
+      ELSE CONCAT('${process.env.URL}/images/categories/', fileName)
+      END AS fileName FROM categories ORDER BY name LIMIT ? OFFSET ?`,
       [limit, offset],
     )
     return rows
@@ -60,9 +64,30 @@ const deleteCategory = async (id) => {
   }
 }
 
+const updateMedia = async (id, fileName) => {
+  try {
+    const [file] = await conn.query(
+      `SELECT fileName FROM categories WHERE id = ?`,
+      [id],
+    )
+    const [rows] = await conn.query(
+      `UPDATE categories SET fileName = ? WHERE id = ?`,
+      [fileName, id],
+    )
+    if (rows.affectedRows === 0) {
+      throw new Error('Something went wrong')
+    }
+    return { success: 'Category is edited successfully', fileName: file[0].fileName }
+  } catch (error) {
+    console.error('Error during editCategory:', error)
+    throw new Error('Something went wrong')
+  }
+}
+
 module.exports = {
   viewCategories,
   addCategory,
   editCategory,
   deleteCategory,
+  updateMedia,
 }

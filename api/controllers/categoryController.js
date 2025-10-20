@@ -1,5 +1,7 @@
 const categoryModel = require('../models/categoryModel')
 const joi = require('joi')
+const path = require('path')
+const fs = require('fs').promises
 
 const viewCategories = async (req, res) => {
   try {
@@ -88,9 +90,36 @@ const deleteCategory = async (req, res) => {
   }
 }
 
+const updateMedia = async (req, res) => {
+  try {
+    const categoryId = parseInt(Object.values(req.body)[0])
+    if (isNaN(categoryId) || categoryId < 1) {
+      return res.status(400).json({ message: 'Category ID is invalid' })
+    }
+    if (!req.file || req.file.length === 0) {
+      return res.status(400).json({ message: 'No file was uploaded' })
+    }
+
+    const result = await categoryModel.updateMedia(categoryId, req.file.filename)
+    if (result.error) {
+      return res.status(400).json({ error: result.error })
+    }
+    try{
+      const filePath = path.join(__dirname, '../../images/categories', result.fileName)
+      await fs.unlink(filePath)
+    } catch (error){}
+
+    return res.status(200).json({ success: 'Media were updated successfully' })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ message: 'Internal server error, Please try again' })
+  }
+}
+
 module.exports = {
   viewCategories,
   editCategory,
   addCategory,
   deleteCategory,
+  updateMedia,
 }

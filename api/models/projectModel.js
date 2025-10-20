@@ -2,7 +2,34 @@ const conn = require('../config/db')
 
 const viewProjectById = async (id) => {
   try {
-    const [rows] = await conn.query(`SELECT * FROM projects WHERE id = ?`, [id])
+    const [rows] = await conn.query(`
+      SELECT 
+        p.*,
+        s.categoryId AS categoryId,
+        s.name AS subCategoryName,
+        s.ARname AS subCategoryARName,
+        CONCAT('${process.env.URL}/images/subCategories/', s.fileName) AS subCategoryfileName,
+        c.name AS categoryName,
+        c.ARname AS categoryARName,
+        CONCAT('${process.env.URL}/images/categories/', c.fileName) AS categoryfileName,
+        COALESCE(
+          JSON_ARRAYAGG(
+            CASE
+              WHEN m.id IS NOT NULL THEN
+                JSON_OBJECT(
+                  'id', m.id,
+                  'fileName', CONCAT('http://0.0.0.0/images/projects/', m.fileName)
+                )
+            END
+          )
+        , JSON_ARRAT()) AS media
+      FROM projects p
+      LEFT JOIN projectMedia m ON p.id = m.projectId
+      LEFT JOIN subCategories s ON p.subCategoryId = s.id
+      LEFT JOIN categories c ON s.categoryId = c.id
+      WHERE p.id = ?
+      GROUP BY p.id
+    `, [id])
     return rows
   } catch (error) {
     console.error('Error during viewProject:', error)
@@ -25,8 +52,41 @@ const viewProjects = async (
     if (categoryId > 0) params.push(categoryId)
     if (subCategoryId > 0) params.push(subCategoryId)
     const [rows] = await conn.query(
-      `SELECT * FROM projects WHERE ${homePage1 ? 'homePage1 = 1 AND' : ''} ${categoryId > 0 ? 'categoryId = ? AND' : ''} ${subCategoryId > 0 ? 'subCategoryId = ? AND' : ''} ${homePage2 ? 'homePage2 = 1' : '1 = 1'} ORDER BY id ${orderDesc ? 'DESC' : ''} LIMIT ? OFFSET ?`,
-      [...params, limit, offset],
+      `
+      SELECT 
+        p.*,
+        s.categoryId AS categoryId,
+        s.name AS subCategoryName,
+        s.ARname AS subCategoryARName,
+        CONCAT('${process.env.URL}/images/subCategories/', s.fileName) AS subCategoryfileName,
+        c.name AS categoryName,
+        c.ARname AS categoryARName,
+        CONCAT('${process.env.URL}/images/categories/', c.fileName) AS categoryfileName,
+        COALESCE(
+          JSON_ARRAYAGG(
+            CASE
+              WHEN m.id IS NOT NULL THEN
+                JSON_OBJECT(
+                  'id', m.id,
+                  'fileName', CONCAT('http://0.0.0.0/images/projects/', m.fileName)
+                )
+            END
+          ), 
+          JSON_ARRAY()
+        ) AS media
+      FROM projects p
+      LEFT JOIN projectMedia m ON p.id = m.projectId
+      LEFT JOIN subCategories s ON p.subCategoryId = s.id
+      LEFT JOIN categories c ON s.categoryId = c.id
+      WHERE 
+        ${homePage1 ? 'p.homePage1 = 1 AND' : ''} 
+        ${categoryId > 0 ? 's.categoryId = ? AND' : ''} 
+        ${subCategoryId > 0 ? 'p.subCategoryId = ? AND' : ''} 
+        ${homePage2 ? 'p.homePage2 = 1' : '1 = 1'}
+      GROUP BY p.id
+      ORDER BY p.id ${orderDesc ? 'DESC' : 'ASC'}
+      LIMIT ? OFFSET ?`,
+      [...params, limit, offset]
     )
     return rows
   } catch (error) {
@@ -41,21 +101,19 @@ const addProject = async (
   description,
   ARdescription,
   link,
-  categoryId,
   subCategoryId,
   showOnHome1,
   showOnHome2,
 ) => {
   try {
     const [rows] = await conn.query(
-      `INSERT INTO projects (title, ARtitle, description, ARdescription, link, categoryId, subCategoryId, showOnHome1, showOnHome2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO projects (title, ARtitle, description, ARdescription, link, subCategoryId, showOnHome1, showOnHome2) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         title,
         ARtitle,
         description,
         ARdescription,
         link,
-        categoryId,
         subCategoryId,
         showOnHome1 + 0,
         showOnHome2 + 0,
@@ -78,21 +136,19 @@ const editProject = async (
   description,
   ARdescription,
   link,
-  categoryId,
   subCategoryId,
   showOnHome1,
   showOnHome2,
 ) => {
   try {
     const [rows] = await conn.query(
-      `UPDATE projects SET title = ?, ARtitle = ?, description = ?, ARdescription = ?, link = ?, categoryId = ?, subCategoryId = ?, showOnHome1 = ?, showOnHome2 = ? WHERE id = ?`,
+      `UPDATE projects SET title = ?, ARtitle = ?, description = ?, ARdescription = ?, link = ?, subCategoryId = ?, showOnHome1 = ?, showOnHome2 = ? WHERE id = ?`,
       [
         title,
         ARtitle,
         description,
         ARdescription,
         link,
-        categoryId,
         subCategoryId,
         showOnHome1 + 0,
         showOnHome2 + 0,

@@ -48,6 +48,12 @@ if (!fs.existsSync(path.join(uploadDir, 'members'))) {
 if (!fs.existsSync(path.join(uploadDir, 'projects'))) {
   fs.mkdirSync(path.join(uploadDir, 'projects'))
 }
+if (!fs.existsSync(path.join(uploadDir, 'categories'))) {
+  fs.mkdirSync(path.join(uploadDir, 'categories'))
+}
+if (!fs.existsSync(path.join(uploadDir, 'subCategories'))) {
+  fs.mkdirSync(path.join(uploadDir, 'subCategories'))
+}
 
 
 // app.use(cors({

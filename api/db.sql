@@ -18,12 +18,12 @@ CREATE TABLE
 
 INSERT INTO
     users (
-        'name',
-        'email',
-        'password',
-        'isAdmin',
-        'isDeleted',
-        'isEmailConfirmed'
+        name,
+        email,
+        password,
+        isAdmin,
+        isDeleted,
+        isEmailConfirmed
     )
 VALUES
     (
@@ -50,6 +50,7 @@ CREATE TABLE
 CREATE TABLE
     categories (
         id INT AUTO_INCREMENT PRIMARY KEY,
+        fileName VARCHAR(255) NULL,
         name VARCHAR(255) NOT NULL,
         ARname VARCHAR(255) NOT NULL
     );
@@ -57,8 +58,11 @@ CREATE TABLE
 CREATE TABLE
     subCategories (
         id INT AUTO_INCREMENT PRIMARY KEY,
+        fileName VARCHAR(255) NULL,
         name VARCHAR(255) NOT NULL,
-        ARname VARCHAR(255) NOT NULL
+        ARname VARCHAR(255) NOT NULL,
+        categoryId INT NOT NULL,
+        FOREIGN KEY (categoryId) REFERENCES categories (id) ON DELETE RESTRICT
     );
 
 CREATE TABLE
@@ -69,11 +73,9 @@ CREATE TABLE
         description TEXT NOT NULL,
         ARdescription TEXT NOT NULL,
         link VARCHAR(255),
-        categoryId INT NOT NULL,
         subCategoryId INT NOT NULL,
         showOnHome1 BOOLEAN NOT NULL DEFAULT 0,
         showOnHome2 BOOLEAN NOT NULL DEFAULT 0,
-        FOREIGN KEY (categoryId) REFERENCES categories (id) ON DELETE RESTRICT,
         FOREIGN KEY (subCategoryId) REFERENCES subCategories (id) ON DELETE RESTRICT
     );
 
@@ -124,7 +126,7 @@ CREATE TABLE
     messages (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL UNIQUE,
+        email VARCHAR(255) NOT NULL,
         createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         message TEXT NOT NULL
     );
