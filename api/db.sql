@@ -4,7 +4,7 @@ CREATE TABLE
     users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL UNIQUE,
+        email VARCHAR(255) NOT NULL,
         password VARCHAR(255) NOT NULL,
         createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         isAdmin BOOLEAN NOT NULL DEFAULT 0,
@@ -96,7 +96,8 @@ CREATE TABLE
         title VARCHAR(255) NOT NULL,
         ARtitle VARCHAR(255) NOT NULL,
         description VARCHAR(255) NOT NULL,
-        ARdescription VARCHAR(255) NOT NULL
+        ARdescription VARCHAR(255) NOT NULL,
+        url VARCHAR(255) NULL
     );
 
 CREATE TABLE

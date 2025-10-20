@@ -4,7 +4,7 @@ const viewSlides = async (page = 1, limit = 10, orderDesc = false) => {
   try {
     const offset = (page - 1) * limit
     const [rows] = await conn.query(
-      `SELECT id, CONCAT('${process.env.URL}/images/slides/', fileName) AS fileName, backText, ARbackText, title, ARtitle, description, ARdescription FROM slides ORDER BY id ${orderDesc ? 'DESC' : ''} LIMIT ? OFFSET ?`,
+      `SELECT id, CONCAT('${process.env.URL}/images/slides/', fileName) AS fileName, url, backText, ARbackText, title, ARtitle, description, ARdescription FROM slides ORDER BY id ${orderDesc ? 'DESC' : ''} LIMIT ? OFFSET ?`,
       [limit, offset]
     )
     return rows
@@ -14,11 +14,11 @@ const viewSlides = async (page = 1, limit = 10, orderDesc = false) => {
   }
 }
 
-const addSlide = async (fileName, backText, ARbackText, title, ARtitle, description, ARdescription) => {
+const addSlide = async (fileName, backText, ARbackText, title, ARtitle, description, ARdescription, url) => {
   try {
     const [rows] = await conn.query(
-      `INSERT INTO slides (fileName, backText, ARbackText, title, ARtitle, description, ARdescription) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [fileName, backText, ARbackText, title, ARtitle, description, ARdescription]
+      `INSERT INTO slides (fileName, backText, ARbackText, title, ARtitle, description, ARdescription, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [fileName, backText, ARbackText, title, ARtitle, description, ARdescription, url]
     )
     if (rows.affectedRows === 0) {
       throw new Error('Something went wrong')

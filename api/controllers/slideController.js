@@ -33,6 +33,7 @@ const addSlide = async (req, res) => {
       ARbackText: joi.string().trim().min(2).max(255).required(),
       ARtitle: joi.string().trim().min(2).max(255).required(),
       ARdescription: joi.string().trim().min(2).max(255).required(),
+      url: joi.string().trim().uri().max(255).allow('').optional(),
     })
     const { error, value } = schema.validate(req.body, {
       abortEarly: true,
@@ -52,6 +53,7 @@ const addSlide = async (req, res) => {
       value.ARbackText,
       value.ARtitle,
       value.ARdescription,
+      value.url
     )
 
     return res.status(200).json({ success: 'Slide is added successfully' })
