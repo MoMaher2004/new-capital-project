@@ -116,19 +116,18 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    settings (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        page VARCHAR(255) NOT NULL,
-        type VARCHAR(255) NOT NULL,
-        content VARCHAR(255) NOT NULL
-    );
-
-CREATE TABLE
     messages (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
         createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         message TEXT NOT NULL
+    );
+
+CREATE TABLE
+    comparisons (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        before VARCHAR(255) NOT NULL,
+        after VARCHAR(255) NOT NULL,
     );

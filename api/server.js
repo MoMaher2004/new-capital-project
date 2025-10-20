@@ -11,6 +11,8 @@ const messageRoute = require('./routes/messageRoute')
 const categoryRoute = require('./routes/categoryRoute')
 const subCategoryRoute = require('./routes/subCategoryRoute')
 const projectRoute = require('./routes/projectRoute')
+const comparisonRoute = require('./routes/comparisonRoute')
+const settingRoute = require('./routes/settingRoute')
 const cors = require('cors')
 const fs = require('fs')
 
@@ -54,6 +56,9 @@ if (!fs.existsSync(path.join(uploadDir, 'categories'))) {
 if (!fs.existsSync(path.join(uploadDir, 'subCategories'))) {
   fs.mkdirSync(path.join(uploadDir, 'subCategories'))
 }
+if (!fs.existsSync(path.join(uploadDir, 'comparisons'))) {
+  fs.mkdirSync(path.join(uploadDir, 'comparisons'))
+}
 
 
 // app.use(cors({
@@ -75,6 +80,8 @@ app.use('/api/message', messageRoute)
 app.use('/api/category', categoryRoute)
 app.use('/api/subCategory', subCategoryRoute)
 app.use('/api/project', projectRoute)
+app.use('/api/comparison', comparisonRoute)
+app.use('/api/setting', settingRoute)
 app.use('/health', (req, res) => {
   return res.status(200).json({ msg: 'hi! server is working' })
 })
