@@ -14,7 +14,7 @@ router.delete('/deleteSubCategory/:id', verifyToken, adminOnly, deleteSubCategor
 router.patch(
   '/updateMedia',
   verifyToken,
-  imagesUtils.uploadImages('subCategories', true).single('files'),
+  imagesUtils.uploadImages('subCategories', false).single('files'),
   adminOnly,
   updateMedia,
 )

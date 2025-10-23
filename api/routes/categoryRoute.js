@@ -19,7 +19,7 @@ router.delete('/deleteCategory/:id', verifyToken, adminOnly, deleteCategory)
 router.patch(
   '/updateMedia',
   verifyToken,
-  imagesUtils.uploadImages('categories', false).single('files'),
+  imagesUtils.uploadImages('categories', true).single('files'),
   adminOnly,
   updateMedia,
 )

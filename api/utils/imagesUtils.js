@@ -34,7 +34,7 @@ const uploadImages = (subDir = '', allowVideos = false) => {
   return multer({
     storage,
     fileFilter,
-    limits: { fileSize: 50 * 1024 * 1024 },
+    limits: { fileSize: process.env.MAX_FILE_SIZE * 1024 * 1024 },
   })
 }
 

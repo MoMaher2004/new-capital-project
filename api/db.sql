@@ -128,6 +128,6 @@ CREATE TABLE
     comparisons (
         id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
-        before VARCHAR(255) NOT NULL,
-        after VARCHAR(255) NOT NULL,
+        `before` VARCHAR(255) NOT NULL,
+        `after` VARCHAR(255) NOT NULL,
     );
